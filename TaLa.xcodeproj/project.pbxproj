@@ -8,22 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		6CA13C1D1FEAA21400C4AB5E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA13C1C1FEAA21400C4AB5E /* AppDelegate.swift */; };
-		6CA13C1F1FEAA21400C4AB5E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA13C1E1FEAA21400C4AB5E /* ViewController.swift */; };
-		6CA13C221FEAA21400C4AB5E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CA13C201FEAA21400C4AB5E /* Main.storyboard */; };
-		6CA13C251FEAA21400C4AB5E /* TaLa.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6CA13C231FEAA21400C4AB5E /* TaLa.xcdatamodeld */; };
-		6CA13C271FEAA21400C4AB5E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CA13C261FEAA21400C4AB5E /* Assets.xcassets */; };
-		6CA13C2A1FEAA21400C4AB5E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CA13C281FEAA21400C4AB5E /* LaunchScreen.storyboard */; };
+		6CA13C4F1FEAA39200C4AB5E /* TaLa.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6CA13C3F1FEAA39100C4AB5E /* TaLa.xcdatamodeld */; };
+		6CA13C501FEAA39200C4AB5E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CA13C461FEAA39100C4AB5E /* Assets.xcassets */; };
+		6CA13C511FEAA39200C4AB5E /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6CA13C481FEAA39100C4AB5E /* Info.plist */; };
+		6CA13C521FEAA39200C4AB5E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CA13C4A1FEAA39200C4AB5E /* LaunchScreen.storyboard */; };
+		6CA13C531FEAA39200C4AB5E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CA13C4C1FEAA39200C4AB5E /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		6CA13C191FEAA21400C4AB5E /* TaLa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaLa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CA13C1C1FEAA21400C4AB5E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		6CA13C1E1FEAA21400C4AB5E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		6CA13C211FEAA21400C4AB5E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		6CA13C241FEAA21400C4AB5E /* TaLa.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TaLa.xcdatamodel; sourceTree = "<group>"; };
-		6CA13C261FEAA21400C4AB5E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		6CA13C291FEAA21400C4AB5E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		6CA13C2B1FEAA21400C4AB5E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6CA13C401FEAA39100C4AB5E /* TaLa.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TaLa.xcdatamodel; sourceTree = "<group>"; };
+		6CA13C461FEAA39100C4AB5E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6CA13C481FEAA39100C4AB5E /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6CA13C4B1FEAA39200C4AB5E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		6CA13C4D1FEAA39200C4AB5E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,14 +56,93 @@
 			isa = PBXGroup;
 			children = (
 				6CA13C1C1FEAA21400C4AB5E /* AppDelegate.swift */,
-				6CA13C1E1FEAA21400C4AB5E /* ViewController.swift */,
-				6CA13C201FEAA21400C4AB5E /* Main.storyboard */,
-				6CA13C261FEAA21400C4AB5E /* Assets.xcassets */,
-				6CA13C281FEAA21400C4AB5E /* LaunchScreen.storyboard */,
-				6CA13C2B1FEAA21400C4AB5E /* Info.plist */,
-				6CA13C231FEAA21400C4AB5E /* TaLa.xcdatamodeld */,
+				6CA13C421FEAA39100C4AB5E /* Services */,
+				6CA13C431FEAA39100C4AB5E /* Storage */,
+				6CA13C3D1FEAA39100C4AB5E /* Model */,
+				6CA13C491FEAA39200C4AB5E /* View */,
+				6CA13C4E1FEAA39200C4AB5E /* ViewModel */,
+				6CA13C441FEAA39100C4AB5E /* Resource */,
 			);
 			path = TaLa;
+			sourceTree = "<group>";
+		};
+		6CA13C3D1FEAA39100C4AB5E /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6CA13C3E1FEAA39100C4AB5E /* CoreData */,
+				6CA13C411FEAA39100C4AB5E /* Models */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		6CA13C3E1FEAA39100C4AB5E /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				6CA13C3F1FEAA39100C4AB5E /* TaLa.xcdatamodeld */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		6CA13C411FEAA39100C4AB5E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		6CA13C421FEAA39100C4AB5E /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		6CA13C431FEAA39100C4AB5E /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		6CA13C441FEAA39100C4AB5E /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				6CA13C451FEAA39100C4AB5E /* Images */,
+				6CA13C471FEAA39100C4AB5E /* Info */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		6CA13C451FEAA39100C4AB5E /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				6CA13C461FEAA39100C4AB5E /* Assets.xcassets */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		6CA13C471FEAA39100C4AB5E /* Info */ = {
+			isa = PBXGroup;
+			children = (
+				6CA13C481FEAA39100C4AB5E /* Info.plist */,
+			);
+			path = Info;
+			sourceTree = "<group>";
+		};
+		6CA13C491FEAA39200C4AB5E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6CA13C4A1FEAA39200C4AB5E /* LaunchScreen.storyboard */,
+				6CA13C4C1FEAA39200C4AB5E /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		6CA13C4E1FEAA39200C4AB5E /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -126,9 +204,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CA13C2A1FEAA21400C4AB5E /* LaunchScreen.storyboard in Resources */,
-				6CA13C271FEAA21400C4AB5E /* Assets.xcassets in Resources */,
-				6CA13C221FEAA21400C4AB5E /* Main.storyboard in Resources */,
+				6CA13C521FEAA39200C4AB5E /* LaunchScreen.storyboard in Resources */,
+				6CA13C511FEAA39200C4AB5E /* Info.plist in Resources */,
+				6CA13C501FEAA39200C4AB5E /* Assets.xcassets in Resources */,
+				6CA13C531FEAA39200C4AB5E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,29 +218,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6CA13C1F1FEAA21400C4AB5E /* ViewController.swift in Sources */,
-				6CA13C251FEAA21400C4AB5E /* TaLa.xcdatamodeld in Sources */,
 				6CA13C1D1FEAA21400C4AB5E /* AppDelegate.swift in Sources */,
+				6CA13C4F1FEAA39200C4AB5E /* TaLa.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		6CA13C201FEAA21400C4AB5E /* Main.storyboard */ = {
+		6CA13C4A1FEAA39200C4AB5E /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				6CA13C211FEAA21400C4AB5E /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		6CA13C281FEAA21400C4AB5E /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6CA13C291FEAA21400C4AB5E /* Base */,
+				6CA13C4B1FEAA39200C4AB5E /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		6CA13C4C1FEAA39200C4AB5E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6CA13C4D1FEAA39200C4AB5E /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -326,12 +404,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		6CA13C231FEAA21400C4AB5E /* TaLa.xcdatamodeld */ = {
+		6CA13C3F1FEAA39100C4AB5E /* TaLa.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				6CA13C241FEAA21400C4AB5E /* TaLa.xcdatamodel */,
+				6CA13C401FEAA39100C4AB5E /* TaLa.xcdatamodel */,
 			);
-			currentVersion = 6CA13C241FEAA21400C4AB5E /* TaLa.xcdatamodel */;
+			currentVersion = 6CA13C401FEAA39100C4AB5E /* TaLa.xcdatamodel */;
 			path = TaLa.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
