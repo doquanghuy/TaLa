@@ -2,7 +2,7 @@
 //  Rule+CoreDataProperties.swift
 //  TaLa
 //
-//  Created by huydoquang on 12/20/17.
+//  Created by huydoquang on 12/27/17.
 //  Copyright © 2017 huydoquang. All rights reserved.
 //
 //
@@ -18,15 +18,18 @@ extension Rule {
     }
 
     @NSManaged public var baseMoney: Int64
-    @NSManaged public var winAll: Int16
-    @NSManaged public var eatLastCard: Int16
-    @NSManaged public var winLost: Int16
-    @NSManaged public var eatFirstCard: Int16
-    @NSManaged public var eatSecondCard: Int16
-    @NSManaged public var eatThirdCard: Int16
     @NSManaged public var circleWin: Int16
     @NSManaged public var dryWin: Int16
-    @NSManaged public var id: Int16
-    @NSManaged public var round: Round?
+    @NSManaged public var eatFirstCard: Int16
+    @NSManaged public var eatLastCard: Int16
+    @NSManaged public var eatSecondCard: Int16
+    @NSManaged public var eatThirdCard: Int16
+    @NSManaged public var createdAt: Date?
+    @NSManaged public var winAll: Int16
+    @NSManaged public var winLost: Int16
+    @NSManaged public var enableSwap: Bool
+    @NSManaged public var enableReverse: Bool
+    @NSManaged public var enableSend: Bool
+    @NSManaged public var games: Game?
 
 }
