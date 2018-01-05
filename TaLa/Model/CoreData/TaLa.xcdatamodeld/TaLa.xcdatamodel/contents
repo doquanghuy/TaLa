@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13533" systemVersion="16G29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="16G29" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Game" representedClassName=".Game" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="createdAt" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="players" toMany="YES" deletionRule="Nullify" destinationEntity="Player" inverseName="game" inverseEntity="Player" syncable="YES"/>
         <relationship name="rounds" toMany="YES" deletionRule="Nullify" destinationEntity="Round" inverseName="game" inverseEntity="Round" syncable="YES"/>
+        <relationship name="rule" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Rule" inverseName="game" inverseEntity="Rule" syncable="YES"/>
     </entity>
     <entity name="Player" representedClassName=".Player" syncable="YES">
-        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="score" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
@@ -22,25 +23,27 @@
         <attribute name="idPlayerWinAll" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="startTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="game" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Game" inverseName="rounds" inverseEntity="Game" syncable="YES"/>
-        <relationship name="rule" maxCount="1" deletionRule="Nullify" destinationEntity="Rule" inverseName="round" inverseEntity="Rule" syncable="YES"/>
     </entity>
     <entity name="Rule" representedClassName=".Rule" syncable="YES">
-        <attribute name="baseMoney" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="baseMoney" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="circleWin" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="dryWin" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="eatFirstCard" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="eatLastCard" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="eatSecondCard" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="eatThirdCard" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="winAll" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="winLost" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="round" maxCount="1" deletionRule="Nullify" destinationEntity="Round" inverseName="rule" inverseEntity="Round" syncable="YES"/>
+        <attribute name="createdAt" attributeType="Date" defaultDateTimeInterval="536000700" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="dryWin" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="eatFirstCard" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="eatLastCard" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="eatSecondCard" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="eatThirdCard" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="enableReverse" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="enableSend" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="enableSwap" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="winAll" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="winLost" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="game" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Game" inverseName="rule" inverseEntity="Game" syncable="YES"/>
     </entity>
     <elements>
+        <element name="Game" positionX="-36" positionY="54" width="128" height="105"/>
         <element name="Player" positionX="-63" positionY="-18" width="128" height="120"/>
-        <element name="Round" positionX="-54" positionY="9" width="128" height="195"/>
-        <element name="Game" positionX="-36" positionY="54" width="128" height="90"/>
-        <element name="Rule" positionX="-18" positionY="63" width="128" height="210"/>
+        <element name="Round" positionX="-54" positionY="9" width="128" height="180"/>
+        <element name="Rule" positionX="-18" positionY="63" width="128" height="255"/>
     </elements>
 </model>
