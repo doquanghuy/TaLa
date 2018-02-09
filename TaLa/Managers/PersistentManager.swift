@@ -9,12 +9,12 @@
 import Foundation
 
 class PersistentManager {
-    static var currentGameCreated: Double? {
+    static var currentGameId: String? {
         get {
-            return UserDefaults.standard.object(forKey: Constants.PersistentKeys.currentGameCreated) as? Double ?? Date().timeIntervalSince1970
+            return UserDefaults.standard.object(forKey: Constants.PersistentKeys.gameId) as? String
         } set(value) {
-            if self.currentGameCreated != value {
-                UserDefaults.standard.set(value, forKey: Constants.PersistentKeys.currentGameCreated)
+            if self.currentGameId != value {
+                UserDefaults.standard.set(value, forKey: Constants.PersistentKeys.gameId)
             }
         }
     }

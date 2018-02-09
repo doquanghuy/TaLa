@@ -23,7 +23,7 @@ class RuleDataProvider: RuleDataProviderInterface {
         return GameManager.shared.currentGame?.rule?.temp as? Rule
     }()
 
-    lazy private var dataSource: [[Rules]] = [[RulesSwitch.swap, RulesSwitch.reverse, RulesSwitch.send], [RulesValue.winAll, RulesValue.circleWin, RulesValue.dryWin, RulesValue.winLost, RulesValue.eatFirstCard, RulesValue.eatSecondCard, RulesValue.eatThirdCard, RulesValue.eatLastCard]]
+    lazy private var dataSource: [[Rules]] = [[RulesSwitch.swap, RulesSwitch.reverse], [RulesValue.winAll, RulesValue.circleWin, RulesValue.dryWin, RulesValue.winLost, RulesValue.eatFirstCard, RulesValue.eatSecondCard, RulesValue.eatThirdCard, RulesValue.eatLastCard, RulesValue.notEat]]
 
     func ruleModelAtIndexPath(at indexPath: IndexPath) -> AnyObject? {
         guard let rule = self.tempRule else { return nil }
@@ -61,23 +61,47 @@ class RuleDataProvider: RuleDataProviderInterface {
 //MARK: - RuleViewModelInterface
 
 protocol RuleViewModelInterface {
-    func createRule()
+    var baseMoney: Dynamic<String?> {get}
+    
+    func loadBaseMoney()
+    func didLoad()
+    func textFieldDidChange(text: String?)
+    @discardableResult
     func save() -> Bool
     func reset()
     func changeRule(rule: Rules, to value: Any)
 }
 
-class RuleViewModel: RuleViewModelInterface {    
+class RuleViewModel: RuleViewModelInterface {
+    var baseMoney: Dynamic<String?> = Dynamic("")
+    
     lazy private var tempRule: Rule? = {
         return GameManager.shared.currentGame?.rule?.temp as? Rule
     }()
     
-    func createRule() {
+    func textFieldDidChange(text: String?) {
+        guard let number = text?.replacingOccurrences(of: ".", with: "") else {
+            self.baseMoney.value = "0"
+            return
+        }
+        if let intVal = Int64(number) {
+            self.baseMoney.value = String.formattedNumber(from: intVal)
+            self.changeRule(rule: RulesValue.baseMoney, to: intVal)
+        }
+    }
+    
+    func didLoad() {
         guard GameManager.shared.currentGame?.rule == nil else { return }
         let rule = Rule(context: CoreDataContext.main.context)
         rule.createdAt = Date()
         GameManager.shared.currentGame?.rule = rule
         Constants.CoreData.coreDataStack.saveContext()
+    }
+    
+    func loadBaseMoney() {
+        let baseMoney = self.tempRule?.baseMoney ?? 0
+        let baseMoneyStr = String.formattedNumber(from: baseMoney)
+        self.baseMoney.value = "\(baseMoneyStr)"
     }
     
     @discardableResult func save() -> Bool {

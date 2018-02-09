@@ -17,13 +17,20 @@
         </array>
     </customFonts>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PlayerFillInfoViewOwner" customModule="TaLa" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PlayerFillInfoView" customModule="TaLa" customModuleProvider="target">
             <connections>
-                <outlet property="playerFillInfoView" destination="eTM-Mp-Hbs" id="B9b-wE-HtQ"/>
+                <outlet property="avatarImageView" destination="IuU-sW-tmR" id="VFr-Mj-th7"/>
+                <outlet property="cancelButton" destination="Rds-m1-7Jj" id="mlF-fb-9bZ"/>
+                <outlet property="contentView" destination="iN0-l3-epB" id="5Ld-Is-ZKg"/>
+                <outlet property="contentViewAlignCenterY" destination="tvB-Kr-qIg" id="tFj-Wu-D5m"/>
+                <outlet property="doneButton" destination="h0X-bi-dBH" id="ZXh-zC-cms"/>
+                <outlet property="imageAlertView" destination="ZXZ-vX-oUx" id="z0J-Zl-In9"/>
+                <outlet property="nameTextField" destination="5mm-jL-1MO" id="Woi-wC-LXB"/>
+                <outlet property="numberPlayerLabel" destination="bCO-Rz-8gz" id="020-6J-Pr7"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="eTM-Mp-Hbs" customClass="PlayerFillInfoView" customModule="TaLa" customModuleProvider="target">
+        <view contentMode="scaleToFill" id="eTM-Mp-Hbs">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
@@ -89,7 +96,7 @@
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
                                     <state key="normal" title="Done"/>
                                     <connections>
-                                        <action selector="done:" destination="eTM-Mp-Hbs" eventType="touchUpInside" id="Sog-MP-FKl"/>
+                                        <action selector="done:" destination="-1" eventType="touchUpInside" id="YlD-c5-1dW"/>
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rds-m1-7Jj">
@@ -102,7 +109,7 @@
                                         <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
                                     <connections>
-                                        <action selector="cancel:" destination="eTM-Mp-Hbs" eventType="touchUpInside" id="fS9-bH-H31"/>
+                                        <action selector="cancel:" destination="-1" eventType="touchUpInside" id="5L3-wl-pHB"/>
                                     </connections>
                                 </button>
                             </subviews>
@@ -163,7 +170,7 @@
                                 <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
-                                <action selector="chooseImage:" destination="eTM-Mp-Hbs" eventType="touchUpInside" id="z5g-ef-Ogg"/>
+                                <action selector="chooseImage:" destination="-1" eventType="touchUpInside" id="MWE-sf-oj6"/>
                             </connections>
                         </button>
                         <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="byC-GW-MyK">
@@ -173,7 +180,7 @@
                                 <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
-                                <action selector="chooseImage:" destination="eTM-Mp-Hbs" eventType="touchUpInside" id="XV6-kO-6nw"/>
+                                <action selector="chooseImage:" destination="-1" eventType="touchUpInside" id="tnL-lc-4SD"/>
                             </connections>
                         </button>
                     </subviews>
@@ -194,7 +201,7 @@
                     <viewLayoutGuide key="safeArea" id="FSs-4B-etJ"/>
                 </view>
             </subviews>
-            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
             <gestureRecognizers/>
             <constraints>
                 <constraint firstItem="jLi-QP-jBI" firstAttribute="trailing" secondItem="ZXZ-vX-oUx" secondAttribute="trailing" constant="40" id="277-Bi-tU1"/>
@@ -206,31 +213,23 @@
             </constraints>
             <viewLayoutGuide key="safeArea" id="jLi-QP-jBI"/>
             <connections>
-                <outlet property="avatarImageView" destination="IuU-sW-tmR" id="pYQ-GX-BPq"/>
-                <outlet property="cancelButton" destination="Rds-m1-7Jj" id="VBZ-YP-Od5"/>
-                <outlet property="contentView" destination="iN0-l3-epB" id="Zkc-WE-YAl"/>
-                <outlet property="contentViewAlignCenterY" destination="tvB-Kr-qIg" id="pym-I0-bie"/>
-                <outlet property="doneButton" destination="h0X-bi-dBH" id="5c0-OJ-xCG"/>
-                <outlet property="imageAlertView" destination="ZXZ-vX-oUx" id="ipe-3E-gdb"/>
-                <outlet property="nameTextField" destination="5mm-jL-1MO" id="QId-6D-RxO"/>
-                <outlet property="numberPlayerLabel" destination="bCO-Rz-8gz" id="ani-ay-N3N"/>
                 <outletCollection property="gestureRecognizers" destination="WeD-1P-Rie" appends="YES" id="T1b-IT-NfM"/>
             </connections>
             <point key="canvasLocation" x="-530.5" y="-62.5"/>
         </view>
         <tapGestureRecognizer id="WeD-1P-Rie">
             <connections>
-                <action selector="dismiss:" destination="eTM-Mp-Hbs" id="7vG-wF-Tr7"/>
+                <action selector="dismiss:" destination="-1" id="udC-4Y-uGF"/>
             </connections>
         </tapGestureRecognizer>
         <tapGestureRecognizer id="RfB-GZ-CV3">
             <connections>
-                <action selector="addImage:" destination="eTM-Mp-Hbs" id="0LK-uE-Jx1"/>
+                <action selector="addImage:" destination="-1" id="sZ9-9r-lai"/>
             </connections>
         </tapGestureRecognizer>
         <tapGestureRecognizer id="HMf-K8-yi8">
             <connections>
-                <action selector="endEditingNameTextField:" destination="eTM-Mp-Hbs" id="Lml-A2-G1h"/>
+                <action selector="endEditingNameTextField:" destination="-1" id="3lQ-xx-TF3"/>
             </connections>
         </tapGestureRecognizer>
     </objects>

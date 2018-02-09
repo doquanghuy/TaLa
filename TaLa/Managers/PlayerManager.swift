@@ -21,10 +21,10 @@ class PlayerEditImplement: PlayerEdit {
             return
         }
         if let image = image {
-            if let imagePath = player.image {
-                player.image = TLFileManager.shared.replaceFile(at: URL(fileURLWithPath: imagePath), with: image)?.path
+            if let imageName = player.image, let imagePath = TLFileManager.shared.fullImagePath(from: imageName) {
+                player.image = TLFileManager.shared.replaceFile(at: URL(fileURLWithPath: imagePath), with: image)?.lastPathComponent
             } else {
-                player.image = TLFileManager.shared.addImage(with: image)?.path
+                player.image = TLFileManager.shared.addImage(with: image)?.lastPathComponent
             }
         } else {
             player.image = nil
@@ -80,10 +80,6 @@ class PlayerFactoryImplement: PlayerFactory {
         let context = Constants.CoreData.coreDataStack.managedContext
         
         for i in 1...4 {
-            if let player = Player.player(at: i, on: .main) {
-                players.append(player)
-                continue
-            }
             let player = Player(context: context)
             player.id = Int16(i)
             players.append(player)

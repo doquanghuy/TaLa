@@ -37,6 +37,8 @@ extension UIColor {
     }
     
     static var lightBlue = UIColor(hex: "1DE8FF")
-    
     static var backgroundColor = UIColor(r: 0.0, g: 0.0, b: 0.0, alpha: 0.8)
+    static var splotlightColor = UIColor(r: 255.0, g: 139.0, b: 5.0, alpha: 0.3)
+    static var silver = UIColor(r: 204, g: 204, b: 204, alpha: 1.0)
+    static var mercury = UIColor(r: 230, g: 230, b: 230, alpha: 1.0)
 }

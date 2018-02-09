@@ -15,22 +15,23 @@ class GameManager {
     private var playerEdit: PlayerEdit = PlayerEditImplement()
     var currentGame: Game?
     
-    func startNewGame() {
-        let currentGameCreated = PersistentManager.currentGameCreated!
-        if let currentGame = Game.game(at: Date(timeIntervalSince1970: currentGameCreated)) {
+    func startNewGame(forceCreate: Bool) {
+        let currentGameId = PersistentManager.currentGameId ?? ""
+        if let currentGame = Game.game(at: currentGameId), !forceCreate {
             self.currentGame = currentGame
             return
         }
         self.currentGame = Game(context: Constants.CoreData.coreDataStack.managedContext)
-        self.currentGame?.createdAt = Date()
+        let newId = "\(Date().timeIntervalSince1970)"
+        self.currentGame?.id = newId
         let players = playerFactory.createPlayers()
         self.currentGame?.players = Set(players)
         Constants.CoreData.coreDataStack.saveContext()
-        PersistentManager.currentGameCreated = currentGameCreated
+        PersistentManager.currentGameId = newId
     }
     
     func endGame() {
-        PersistentManager.currentGameCreated = nil
+        PersistentManager.currentGameId = nil
     }
     
     func createRule() -> Rule? {

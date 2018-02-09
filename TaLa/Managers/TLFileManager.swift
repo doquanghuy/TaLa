@@ -9,6 +9,7 @@
 import UIKit
 
 protocol TLFileManagerInterface {
+    func fullImagePath(from fileName: String) -> String?
     func addImage(with image: UIImage, and name: String) -> URL?
     func removeFile(at url: URL) -> Bool
     func replaceFile(at url: URL, with image: UIImage) -> URL?
@@ -18,7 +19,7 @@ protocol TLFileManagerInterface {
 class TLFileManager: TLFileManagerInterface {
     static let shared = TLFileManager()
     
-    private var defaultImagesFolder: URL? {
+    private lazy var defaultImagesFolder: URL?  = {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let dataPath = documentsDirectory.appendingPathComponent(Constants.Folder.defaultImagesFolderName)
         do {
@@ -28,9 +29,14 @@ class TLFileManager: TLFileManagerInterface {
             print("Error creating directory: \(error.localizedDescription)")
             return nil
         }
+    }()
+    
+    func fullImagePath(from fileName: String) -> String? {
+        guard let fileURL = self.defaultImagesFolder?.appendingPathComponent(fileName) else {return nil}
+        return fileURL.path
     }
 
-    func addImage(with image: UIImage, and name: String = "\(Date().timeIntervalSince1970)") -> URL? {
+    func addImage(with image: UIImage, and name: String = "\(Date().timeIntervalSince1970).png") -> URL? {
         guard let fileURL = self.defaultImagesFolder?.appendingPathComponent(name), let data = UIImagePNGRepresentation(image) else { return nil }
         do {
             try data.write(to: fileURL, options: .atomic)
@@ -52,9 +58,9 @@ class TLFileManager: TLFileManagerInterface {
     }
     
     func replaceFile(at url: URL, with image: UIImage) -> URL? {
-        let desURL = url.deletingLastPathComponent().appendingPathComponent("\(Date().timeIntervalSince1970)")
         do {
-            try FileManager.default.moveItem(at: url, to: desURL)
+            let desURL = self.addImage(with: image)
+            try FileManager.default.removeItem(at: url)
             return desURL
         } catch let error as NSError {
             print("Error move file: \(error.localizedDescription)")

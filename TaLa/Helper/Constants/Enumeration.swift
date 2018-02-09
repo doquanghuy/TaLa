@@ -6,7 +6,7 @@
 //  Copyright © 2017 huydoquang. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import CoreData
 
 enum BaseResult {
@@ -49,7 +49,7 @@ enum RulesSwitch: Rules {
         case .eatLast:
             return "Ăn cây chốt"
         case .reverse:
-            return "Đảo vòng"
+            return "Ngược chiều kim đồng hồ"
         case .send:
             return "Gửi bài"
         case .swap:
@@ -62,9 +62,7 @@ enum RulesSwitch: Rules {
     var keyPath: String? {
         switch self {
         case .reverse:
-            return "enableReverse"
-        case .send:
-            return "enableSend"
+            return "isAntiClockWise"
         case .swap:
             return "enableSwap"
         case .circleWin:
@@ -82,7 +80,7 @@ enum RulesSwitch: Rules {
 }
 
 enum RulesValue: Rules {
-    case eatFirstCard, eatSecondCard, eatThirdCard, winLost, winAll, circleWin, dryWin, eatLastCard, baseMoney
+    case eatFirstCard, eatSecondCard, eatThirdCard, winLost, winAll, circleWin, dryWin, eatLastCard, notEat, baseMoney
     
     var contentDisplay: String {
         switch self {
@@ -93,17 +91,19 @@ enum RulesValue: Rules {
         case .winAll:
             return "Ù"
         case .eatFirstCard:
-            return "Ăn Cây Thứ Nhất"
+            return "Ăn Cây 1"
         case .eatSecondCard:
-            return "Ăn Cây Thứ Hai"
+            return "Ăn Cây 2"
         case .eatThirdCard:
-            return "Ăn Cây Thứ Ba"
+            return "Ăn Cây 3"
         case .eatLastCard:
             return "Ăn Cây Chốt"
         case .baseMoney:
             return "Mức Cược"
-        default:
+        case .winLost:
             return "Ù Đền"
+        default:
+            return "Móm"
         }
     }
     
@@ -125,8 +125,96 @@ enum RulesValue: Rules {
             return "eatLastCard"
         case .baseMoney:
             return "baseMoney"
-        default:
+        case .winLost:
             return "winLost"
+        default:
+            return "notEat"
         }
     }
+}
+
+
+enum Result {
+    case winLost, winAll, normal(numberNotEat: Int)
+}
+
+enum EatTypes: Int {
+    case normal, last
+    
+    var color: UIColor {
+        switch self {
+        case .normal:
+            return .lightGray
+        default:
+            return .orange
+        }
+    }    
+}
+
+enum PlayerResult: Int {
+    case none
+    case first
+    case second
+    case third
+    case forth
+    case notEat
+    case win
+    case lost
+    case winAll
+    case lostAll
+    case winCircle
+    case lostCircle
+    case winAllCircle
+    case lostAllCircle
+    case winDry
+    case lostDry
+    
+    func score(round: Round) -> Int16? {
+        guard let rule = GameManager.shared.currentGame?.rule else {return nil}
+        switch self {
+        case .first:
+            let loserResults = [round.resultPlayer1, round.resultPlayer2, round.resultPlayer3, round.resultPlayer4]
+                .flatMap {PlayerResult(rawValue: Int($0))}
+                .filter {$0 != self}
+            return loserResults.reduce(0, {(total, loserResult) -> Int16 in
+                return total - loserResult.score(round: round)!
+            })
+        case .second:
+            return -1
+        case .third:
+            return -2
+        case .forth:
+            return -3
+        case .notEat:
+            return -4
+        case .win:
+            return rule.winLost * rule.winAll
+        case .lost:
+            return -(rule.winLost * rule.winAll)
+        case .winAll:
+            return rule.winAll
+        case .lostAll:
+            return -(rule.winAll / 3)
+        case .winCircle:
+            return rule.circleWin * rule.winAll
+        case .lostCircle:
+            return -rule.circleWin * rule.winAll
+        case .winAllCircle:
+            return rule.circleWin * rule.winAll
+        case .lostAllCircle:
+            return rule.circleWin * rule.winAll / 3
+        case .winDry:
+            return rule.dryWin * rule.winAll
+        case .lostDry:
+            return (-rule.dryWin * rule.winAll) / 3
+        default:
+            return nil
+        }
+    }
+}
+
+enum RoundResult: Int {
+    case normal, winNormal, winCircleNormal, winDry, winLost, winCircleLost
+    
+    static let allCases: [RoundResult] = [.normal, .winNormal, .winCircleNormal, .winDry, .winLost, .winCircleLost]
 }

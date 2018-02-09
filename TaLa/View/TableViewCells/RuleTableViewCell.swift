@@ -16,6 +16,7 @@ class RuleTableViewCell: UITableViewCell {
     @IBOutlet weak var ruleName: UILabel!
     @IBOutlet weak var stepper: UIStepper!
     @IBOutlet weak var valueLabel: UILabel!
+    @IBOutlet weak var prefixLabel: UILabel!
     
     private var viewModel: RuleTableViewCellViewModelInterface!
     private weak var delegate: RuleTableViewCellDelegate?
@@ -27,6 +28,9 @@ class RuleTableViewCell: UITableViewCell {
     func configure(with viewModel: RuleTableViewCellViewModelInterface, and delegate: RuleTableViewCellDelegate?) {
         self.viewModel = viewModel
         self.delegate = delegate
+        self.viewModel.prefix.bind { (value) in
+            self.prefixLabel.text = value
+        }
         
         self.viewModel.nameRule.bind {[weak self] (value) in
             self?.ruleName.text = value

@@ -28,8 +28,8 @@ class RuleSwitchTableViewCell: UITableViewCell {
         
         self.viewModel.isOn.bind {[weak self] (value) in
             guard let this = self else { return }
-            self?.delegate?.ruleSwitchChange(with: this.viewModel.ruleSwitchType, to: value)
-            self?.ruleSwitch.isOn = value
+            this.delegate?.ruleSwitchChange(with: this.viewModel.ruleSwitchType, to: value)
+            this.ruleSwitch.isOn = value
         }
         self.viewModel.nameRule.bind {[weak self] (value) in
             self?.ruleName.text = value

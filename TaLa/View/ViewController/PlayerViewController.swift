@@ -9,35 +9,31 @@
 
 import UIKit
 
-class PlayerViewController: UIViewController {
-    @IBOutlet weak var playersViewContainer: UIView!
+class PlayerViewController: BaseViewController {
+    @IBOutlet weak var playersView: PlayersView!
     private var playerFillInfoView: PlayerFillInfoView?
-    private var playersView: PlayersView?
     private var currentEditPlayerNumber: Int!
-    private var playerViewModel: SetUpPlayer = SetUpPlayerViewModel()
     private var didShowPlayerFillInfoView = false
+    private var isEdit = false
+    var playerViewModel: SetUpPlayer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupUI()
-        self.setupData()
     }
     
-    private func setupUI() {
-        self.playersView = PlayersView.addView(to: playersViewContainer, with: playersViewContainer.bounds, delegate: self)
+    class var instance: PlayerViewController {
+        return UIStoryboard(name: Constants.Storyboards.main.name, bundle: nil).instantiateViewController(withIdentifier: Constants.Storyboards.main.viewControllers[self.name]!) as! PlayerViewController
+        
     }
     
-    private func setupData() {
-        playerViewModel.setupData()
+    func enableBarButtonItems() {
+        self.navigationItem.leftBarButtonItem?.isEnabled = true
+        self.navigationItem.rightBarButtonItem?.isEnabled = true
     }
     
-    @IBAction func back(_ sender: Any) {
-        self.playerViewModel.cancel()
-    }
-    
-    @IBAction func save(_ sender: Any) {
-        self.playerViewModel.save()
-        self.performSegue(withIdentifier: Constants.Segues.fromPlayerVCToRuleVC, sender: nil)
+    func unableBarButtonItems() {
+        self.navigationItem.leftBarButtonItem?.isEnabled = false
+        self.navigationItem.rightBarButtonItem?.isEnabled = false
     }
 }
 
@@ -47,7 +43,6 @@ extension PlayerViewController: PlayersViewDelegate {
     }
     
     func playerViewDidEndChangePosition(from fromPlayerView: UIImageView, to toPlayerView: UIImageView, from fromBounderView: BounderView, to toBounderView: BounderView) {
-        self.playersView?.swapPlayerViewLocation(from: fromPlayerView, to: toPlayerView, from: fromBounderView, to: toBounderView)
         self.playerViewModel.swapPlayer(fromIndex: fromBounderView.tag, toIndex: toBounderView.tag)
     }
     
@@ -57,15 +52,24 @@ extension PlayerViewController: PlayersViewDelegate {
     
     func playerViewDidTap(playerView: UIImageView, playerNumber: Int) {
         guard !self.didShowPlayerFillInfoView else { return }
+        self.unableBarButtonItems()
         self.didShowPlayerFillInfoView = true
         self.currentEditPlayerNumber = playerNumber
-        self.playerFillInfoView = PlayerFillInfoView.addView(to: self.view, with: self.view.bounds, delegate: self, player: self.playerViewModel.player(at: playerNumber))
+        self.playerFillInfoView = PlayerFillInfoView(frame: self.view.bounds, delegate: self, player: self.playerViewModel.player(at: playerNumber))
+        self.view.addSubview(self.playerFillInfoView!)
+        self.playerFillInfoView?.contentView?.transform = CGAffineTransform.identity.scaledBy(x: 0.0001, y: 0.0001)
+        UIView.animate(withDuration: 0.25, delay: 0.2, usingSpringWithDamping: 0.6, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
+            self.playerFillInfoView?.contentView?.transform = CGAffineTransform.identity.scaledBy(x: 1.0, y: 1.0)
+        }) { (finished) in
+            self.playerFillInfoView?.contentView?.transform = CGAffineTransform.identity
+        }
     }
 }
 
 extension PlayerViewController: PlayerFillInfoViewDelegate {
     func playerFillInfoViewDidTap(playerFillInfoView: PlayerFillInfoView) {
         self.didShowPlayerFillInfoView = false
+        self.enableBarButtonItems()
     }
     
     func playerFillInfoDidChooseImage(from sourceType: UIImagePickerControllerSourceType, with playerFillInfoView: PlayerFillInfoView) {
@@ -81,10 +85,12 @@ extension PlayerViewController: PlayerFillInfoViewDelegate {
         self.playerViewModel.setupPlayerInfo(withImage: image, andName: name, andScore: 0, at: self.currentEditPlayerNumber)
         self.playersView?.updateUI(image: image, name: name, playerNumber: self.currentEditPlayerNumber)
         self.didShowPlayerFillInfoView = false
+        self.enableBarButtonItems()
     }
     
     func playerFillInfoDidCancel() {
         self.didShowPlayerFillInfoView = false
+        self.enableBarButtonItems()
     }
 }
 

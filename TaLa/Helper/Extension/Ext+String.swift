@@ -13,19 +13,7 @@ extension String {
         return "Player \(number)"
     }
     
-    func convertStringToNumberString(groupSize: Int) -> String {
-        let separator = "."
-        let formatter = NumberFormatter()
-        formatter.groupingSeparator = separator
-        formatter.groupingSize = groupSize
-        formatter.usesGroupingSeparator = true
-        formatter.secondaryGroupingSize = 2
-
-        let number = self.replacingOccurrences(of: separator, with: "")
-        if let doubleVal = Double(number) {
-            let requiredString = formatter.string(from: NSNumber(value: doubleVal))
-            return requiredString ?? "0"
-        }
-        return "0"
+    static func formattedNumber(from number: Int64) -> String {
+        return Formatter.defaultNumberFormatter.string(from: NSNumber(value: number)) ?? "0"
     }
 }

@@ -37,7 +37,7 @@ class BounderView: UIView, BounderViewInterface {
     func updateUI(isInside: Bool) {
         guard self.isInside != isInside else { return }
         self.isInside = isInside
-        self.layer.borderColor = isInside ? UIColor.lightBlue?.cgColor : UIColor.darkGray.cgColor
+        self.layer.borderColor = isInside ? UIColor.lightBlue?.cgColor : UIColor.clear.cgColor
         self.layer.borderWidth = isInside ? 7.0 : 0.5
     }
     

@@ -8,13 +8,17 @@
 
 import UIKit
 
-class RuleViewController: UIViewController {
+class RuleViewController: BaseViewController {
 
     @IBOutlet weak var baseMoneyTextField: UITextField!
     @IBOutlet weak var tableView: UITableView!
     
     private let viewModel: RuleViewModelInterface = RuleViewModel()
     private let dataProvider: RuleDataProviderInterface = RuleDataProvider()
+    
+    class var instance: RuleViewController {
+        return UIStoryboard(name: Constants.Storyboards.main.name, bundle: nil).instantiateViewController(withIdentifier: Constants.Storyboards.main.viewControllers[self.name]!) as! RuleViewController
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,10 +30,19 @@ class RuleViewController: UIViewController {
         let headerNib = UINib(nibName: String(describing: RuleHeaderTableView.self), bundle: nil)
         self.tableView.register(headerNib, forHeaderFooterViewReuseIdentifier: String(describing: RuleHeaderTableView.self))
         self.baseMoneyTextField.becomeFirstResponder()
+        self.baseMoneyTextField.addTarget(self, action: #selector(self.textFieldDidChange(textField:)), for: .editingChanged)
     }
     
     private func setupData() {
-        self.viewModel.createRule()
+        self.viewModel.baseMoney.bind {[weak self] (value) in
+            self?.baseMoneyTextField.text = value
+        }
+        self.viewModel.didLoad()
+        self.viewModel.loadBaseMoney()
+    }
+    
+    @objc func textFieldDidChange(textField: UITextField) {
+        self.viewModel.textFieldDidChange(text: textField.text)
     }
     
     @IBAction func processWhenClickLeftBarButtonItem(_ sender: Any) {
@@ -39,6 +52,15 @@ class RuleViewController: UIViewController {
     
     @IBAction func processWhenClickRightBarButtonItem(_ sender: Any) {
         self.viewModel.save()
+        self.performSegue(withIdentifier: Constants.Segues.fromRuleVCToRoundVC, sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        self.definesPresentationContext = true
+    }
+    
+    deinit {
+        print("deinit")
     }
 }
 
@@ -90,15 +112,5 @@ extension RuleViewController: RuleSwitchTableViewCellDelegate {
 extension RuleViewController: RuleTableViewCellDelegate {
     func ruleDidChange(with ruleType: RulesValue, and value: Double) {
         self.viewModel.changeRule(rule: ruleType, to: Int16(value))
-    }
-}
-
-extension RuleViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        guard let number = textField.text, string != "" else {
-            return true
-        }
-        textField.text = number.convertStringToNumberString(groupSize: string.isEmpty ? 4 : 2)
-        return true
     }
 }

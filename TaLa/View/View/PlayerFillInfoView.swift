@@ -8,16 +8,13 @@
 
 import UIKit
 
-protocol PlayerFillInfoViewDelegate: class {
+@objc protocol PlayerFillInfoViewDelegate: class {
     func playerFillInfoViewDidTap(playerFillInfoView: PlayerFillInfoView)
     func playerFillInfoDidChooseImage(from sourceType: UIImagePickerControllerSourceType, with playerFillInfoView: PlayerFillInfoView)
     func playerFillInfoDidSave(image: UIImage?, name: String?)
     func playerFillInfoDidCancel()
 }
 
-class PlayerFillInfoViewOwner: NSObject {
-    @IBOutlet var playerFillInfoView: PlayerFillInfoView!
-}
 
 class PlayerFillInfoView: UIView {
     @IBOutlet weak var avatarImageView: UIImageView!
@@ -37,21 +34,16 @@ class PlayerFillInfoView: UIView {
         self.addObserver()
     }
     
-    static func addView(to view: UIView, with frame: CGRect, delegate: PlayerFillInfoViewDelegate & UIViewController, player: Player?, completion: (() -> Void)? = nil) -> PlayerFillInfoView {
-        let owner = PlayerFillInfoViewOwner()
-        Bundle.main.loadNibNamed(String(describing: self), owner: owner, options: nil)
-        owner.playerFillInfoView.delegate = delegate
-        owner.playerFillInfoView.frame = frame
-        owner.playerFillInfoView.updateUI(with: player)
-        view.addSubview(owner.playerFillInfoView)
-        (owner.playerFillInfoView.contentView).transform = CGAffineTransform.identity.scaledBy(x: 0.0001, y: 0.0001)
-        UIView.animate(withDuration: 0.25, delay: 0.2, usingSpringWithDamping: 0.6, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
-            (owner.playerFillInfoView.contentView).transform = CGAffineTransform.identity.scaledBy(x: 1.0, y: 1.0)
-        }) { (finished) in
-            (owner.playerFillInfoView.contentView).transform = CGAffineTransform.identity
-            completion?()
-        }
-        return owner.playerFillInfoView
+    init(frame: CGRect, delegate: PlayerFillInfoViewDelegate & UIViewController, player: Player?) {
+        super.init(frame: frame)
+        self.setupFromXib()
+        self.delegate = delegate
+        self.updateUI(with: player)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.setupFromXib()
     }
     
     private func addObserver() {
@@ -72,7 +64,9 @@ class PlayerFillInfoView: UIView {
         guard let player = player else { return }
         self.numberPlayerLabel.text = String.playerNumber(with: Int(player.id))
         self.nameTextField.text = player.name
-        self.avatarImageView.image = UIImage(contentsOfFile: player.image ?? "")
+        if let imageName = player.image, let fullPath = TLFileManager.shared.fullImagePath(from: imageName) {
+            self.avatarImageView.image = UIImage(contentsOfFile: fullPath)
+        }
     }
     
     private func showImageAlertView() {
@@ -124,8 +118,8 @@ class PlayerFillInfoView: UIView {
     }
     
     @IBAction func done(_ sender: UIButton) {
-        self.removeFromSuperview()
         self.delegate?.playerFillInfoDidSave(image: self.avatarImageView.image, name: self.nameTextField.text)
+        self.removeFromSuperview()
     }
     
     @IBAction func cancel(_ sender: UIButton) {
