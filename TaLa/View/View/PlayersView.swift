@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol PlayersViewDelegate: class {
+@objc protocol PlayersViewDelegate: class {
     func playerViewDidBeginChangePosition(playerView: UIImageView, bounderView: BounderView)
     func playerViewChangingPosition(playerView: UIImageView, bounderView: BounderView)
     func playerViewDidEndChangePosition(from fromPlayerView: UIImageView, to toPlayerView: UIImageView, from fromBounderView: BounderView, to toBounderView: BounderView)
@@ -22,10 +22,6 @@ extension PlayersViewDelegate {
     func playerViewDidTap(playerView: UIImageView, playerNumber: Int) {}
 }
 
-class PlayerViewOwner: NSObject {
-    @IBOutlet var playersView: PlayersView!
-}
-
 class PlayersView: UIView {
     @IBOutlet var bounders: [BounderView]!
     @IBOutlet var tapGestures: [UITapGestureRecognizer]!
@@ -35,7 +31,7 @@ class PlayersView: UIView {
     @IBOutlet weak var playerView3: UIImageView!
     @IBOutlet weak var playerView4: UIImageView!
     
-    private weak var delegate: PlayersViewDelegate?
+    @IBOutlet weak var delegate: PlayersViewDelegate?
     private var firstLocation: CGPoint!
     private var newPlayerView: UIImageView!
     private var currentBounderViewTag: Int!
@@ -46,37 +42,27 @@ class PlayersView: UIView {
         super.awakeFromNib()
         self.setupUI()
     }
-        
-    static func addView(to view: UIView, with frame: CGRect, delegate: PlayersViewDelegate, enableEditPlayerInfo: Bool = true, enableSwapPlayers: Bool = true, completion: (() -> Void)? = nil) -> PlayersView {
-        let owner = PlayerViewOwner()
-        Bundle.main.loadNibNamed(String(describing: self), owner: owner, options: nil)
-        owner.playersView.delegate = delegate
-        owner.playersView.frame = frame
-        owner.playersView.setupGestures(enableSwapPlayers: enableSwapPlayers, enableEditPlayerInfo: enableEditPlayerInfo)
-        view.addSubview(owner.playersView)
-        owner.playersView.updateUIWithPlayers()
-        owner.playersView.transform = CGAffineTransform.identity.scaledBy(x: 0.0001, y: 0.0001)
-        UIView.animate(withDuration: 0.25, delay: 0.2, usingSpringWithDamping: 0.6, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
-            owner.playersView.transform = CGAffineTransform.identity.scaledBy(x: 1.0, y: 1.0)
-        }) { (finished) in
-            owner.playersView.transform = CGAffineTransform.identity
-            completion?()
-        }
-        return owner.playersView
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        self.setupFromXib()
+        self.setupGestures(enableSwapPlayers: true, enableEditPlayerInfo: true)
+        self.updateUIWithPlayers()
     }
     
-    private func setupUI() {
-        self.bounders.forEach { (bounderView) in
-            bounderView.layer.borderColor = UIColor.darkGray.cgColor
-            bounderView.layer.borderWidth = 0.5
-            bounderView.layer.cornerRadius = 5.0
+    private func setupUI() {        
+        [playerView1, playerView2, playerView3, playerView4]
+            .forEach {
+                $0?.makeViewCircle(maskToBound: true)
+                $0?.autoresizingMask = [.flexibleTopMargin, .flexibleBottomMargin, .flexibleLeftMargin, .flexibleRightMargin]
         }
     }
     
     private func updateUIWithPlayers() {
         for i in 1...4 {
-            let player = self.viewModel.player(at: i)
-            [playerView1, playerView2, playerView3, playerView4][i - 1]?.image = UIImage(contentsOfFile: player?.image ?? "")
+            if let player = self.viewModel.player(at: i), let imageName = player.image, let fullPath = TLFileManager.shared.fullImagePath(from: imageName) {
+                [playerView1, playerView2, playerView3, playerView4][i - 1]?.image = UIImage(contentsOfFile: fullPath)
+            }
         }
     }
     
@@ -130,15 +116,10 @@ class PlayersView: UIView {
     private func processWithBeganState(gesture: UIPanGestureRecognizer) {
         guard let playerView = gesture.view as? UIImageView, let bounderView = playerView.superview as? BounderView else { return }
         playerView.isHidden = true
-        let newFrame = CGRect(origin: .zero, size: playerView.frame.size)
         self.disablePanGestures(exclude: playerView)
-        self.newPlayerView = UIImageView(frame: newFrame)
-        self.newPlayerView.center = self.convert(playerView.center, from: playerView.superview)
-        self.newPlayerView.image = playerView.image
-        self.newPlayerView.backgroundColor = playerView.backgroundColor
+        self.newPlayerView = playerView.temp(on: self)
         self.currentBounderViewTag = bounderView.tag
         self.setupObserver(with: self.newPlayerView)
-        self.addSubview(self.newPlayerView)
         self.firstLocation = newPlayerView.center
         self.delegate?.playerViewDidBeginChangePosition(playerView: self.newPlayerView, bounderView: bounderView)
     }
@@ -151,58 +132,39 @@ class PlayersView: UIView {
     
     private func processWithEndState(gesture: UIPanGestureRecognizer) {
         guard let playerView = gesture.view as? UIImageView, let bounderView = playerView.superview as? BounderView else { return }
-        if let insideTag = self.bounderInsides.last?.tag, let toPlayerView = self.playerView(from: insideTag), let toBounderView = self.viewWithTag(insideTag) as? BounderView {
-            let center = bounderView.convert(self.newPlayerView.center, from: self.newPlayerView.superview)
-            playerView.center = center
-            self.delegate?.playerViewDidEndChangePosition(from: playerView, to: toPlayerView, from: bounderView, to: toBounderView)
-        }
-        UIView.animate(withDuration: 0.25, animations: {
-            self.newPlayerView.center = self.firstLocation
-        }) { (finished) in
+        
+        let reset = {[weak self] in
+            guard let weakSelf = self else { return }
+            playerView.center = bounderView.convert(weakSelf.newPlayerView.center, from: weakSelf.newPlayerView.superview)
             playerView.isHidden = false
-            self.newPlayerView.removeFromSuperview()
-            self.newPlayerView = nil
-            self.currentBounderViewTag = nil
-            self.enablePanGestures()
+            weakSelf.newPlayerView.isHidden = true
+            weakSelf.newPlayerView.center = weakSelf.firstLocation
+            weakSelf.newPlayerView.removeFromSuperview()
+            weakSelf.newPlayerView = nil
+            weakSelf.currentBounderViewTag = nil
+            weakSelf.enablePanGestures()
+        }
+        
+        if let insideTag = self.bounderInsides.last?.tag, let toPlayerView = self.playerView(from: insideTag), let toBounderView = self.viewWithTag(insideTag) as? BounderView {
+            reset()
+            let size = CGSize(width: 100.0, height: 100.0)
+            let firstCenter = bounderView.convert(bounderView.center, from: bounderView.superview)
+            let secondCenter = toBounderView.convert(toBounderView.center, from: toBounderView.superview)
+            let firstOrigin = CGPoint(x: firstCenter.x - size.width / 2.0, y: firstCenter.y - size.height / 2.0)
+            let secondOrigin = CGPoint(x: secondCenter.x - size.width / 2.0, y: secondCenter.y - size.height / 2.0)
+            let firstFrame = CGRect(origin: firstOrigin, size: size)
+            let secondFrame = CGRect(origin: secondOrigin, size: size)
+            UIView.animationSwap(firstView: playerView, with: firstFrame, to: toPlayerView, with: secondFrame, sameParentView: self)
+            self.delegate?.playerViewDidEndChangePosition(from: playerView, to: toPlayerView, from: bounderView, to: toBounderView)
+        } else if let newFrame = self.newPlayerView.superview?.convert(playerView.frame, from: playerView.superview){
+            self.newPlayerView.animationToMatch(newFrame: newFrame, updateNewFrameWhenCancel: true) {
+                reset()
+            }
         }
     }
     
     func updateUI(image: UIImage?, name: String?, playerNumber: Int) {
         self.playerView(from: playerNumber)?.image = image
-    }
-    
-    func swapPlayerViewLocation(from fromPlayerView: UIImageView, to toPlayerView: UIImageView, from fromBounderView: BounderView, to toBounderView: BounderView) {
-        let toImage = toPlayerView.image
-        let fromImage = fromPlayerView.image
-        
-        fromPlayerView.isHidden = true
-        let newFrame = CGRect(origin: .zero, size: fromPlayerView.frame.size)
-        let newFromPlayerView = UIImageView(frame: newFrame)
-        newFromPlayerView.backgroundColor = fromPlayerView.backgroundColor
-        newFromPlayerView.image = fromImage
-        newFromPlayerView.center = self.convert(fromPlayerView.center, from: fromPlayerView.superview)
-        fromPlayerView.center = fromBounderView.convert(fromBounderView.center, from: fromBounderView.superview)
-        self.addSubview(newFromPlayerView)
-        
-        toPlayerView.isHidden = true
-        let newToPlayerView = UIImageView(frame: CGRect(origin: .zero, size: toPlayerView.frame.size))
-        newToPlayerView.image = toPlayerView.image
-        newToPlayerView.backgroundColor = toPlayerView.backgroundColor
-        newToPlayerView.center = self.convert(toPlayerView.center, from: toPlayerView.superview)
-        self.addSubview(newToPlayerView)
-        
-        UIView.animate(withDuration: 0.25, animations: {
-            newFromPlayerView.center = self.convert(toPlayerView.center, from: toPlayerView.superview)
-            newToPlayerView.center = self.convert(fromBounderView.center, from: fromBounderView.superview)
-        }) { (finished) in
-            toPlayerView.image = fromImage
-            toPlayerView.isHidden = false
-            newFromPlayerView.removeFromSuperview()
-            
-            fromPlayerView.image = toImage
-            fromPlayerView.isHidden = false
-            newToPlayerView.removeFromSuperview()
-        }
     }
     
     @IBAction func processPanGesture(_ sender: UIPanGestureRecognizer) {

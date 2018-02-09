@@ -32,9 +32,10 @@ class RuleSwitchTableViewCellViewModel: RuleSwitchTableViewCellViewModelInterfac
     }
     
     func parse() {
-        self.nameRule.value = ruleSwitchType.contentDisplay
         if let keyPath = ruleSwitchType.keyPath {
-            self.isOn.value = rule.value(forKeyPath: keyPath) as? Bool ?? true
+            let value = rule.value(forKeyPath: keyPath) as? Bool ?? true
+            self.isOn.value = value
         }
+        self.nameRule.value = ruleSwitchType.contentDisplay
     }
 }

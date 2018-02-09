@@ -14,7 +14,8 @@ protocol SetUpPlayer {
     var didSetUpPlayer: Dynamic<Bool> { get }
     var didSave: Dynamic<Bool> { get }
     
-    func setupData()
+    init(forceCreate: Bool)
+    func setupData(forceCreate: Bool)
     func setupPlayerInfo(withImage image: UIImage?, andName name: String?, andScore score: Int, at index: Int)
     func swapPlayer(fromIndex: Int, toIndex: Int)
     func save()
@@ -27,8 +28,12 @@ class SetUpPlayerViewModel: SetUpPlayer {
     var didSetUpPlayer: Dynamic<Bool> = Dynamic(false)
     var didSave: Dynamic<Bool> = Dynamic(false)
     
-    func setupData() {
-        GameManager.shared.startNewGame()
+    required init(forceCreate: Bool) {
+        self.setupData(forceCreate: forceCreate)
+    }
+    
+    func setupData(forceCreate: Bool) {
+        GameManager.shared.startNewGame(forceCreate: forceCreate)
     }
     
     func player(at index: Int) -> Player? {

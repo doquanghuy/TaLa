@@ -27,9 +27,8 @@ extension Rule {
     @NSManaged public var createdAt: Date?
     @NSManaged public var winAll: Int16
     @NSManaged public var winLost: Int16
+    @NSManaged public var notEat: Int16
     @NSManaged public var enableSwap: Bool
-    @NSManaged public var enableReverse: Bool
-    @NSManaged public var enableSend: Bool
+    @NSManaged public var isAntiClockWise: Bool
     @NSManaged public var games: Game?
-
 }

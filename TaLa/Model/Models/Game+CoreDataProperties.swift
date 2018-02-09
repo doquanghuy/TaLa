@@ -17,7 +17,7 @@ extension Game {
         return NSFetchRequest<Game>(entityName: "Game")
     }
 
-    @NSManaged public var createdAt: Date?
+    @NSManaged public var id: String
     @NSManaged public var players: Set<Player>?
     @NSManaged public var rounds: Set<Round>?
     @NSManaged public var rule: Rule?

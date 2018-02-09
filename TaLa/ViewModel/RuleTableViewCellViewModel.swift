@@ -11,6 +11,7 @@ import Foundation
 protocol RuleTableViewCellViewModelInterface {
     var nameRule: Dynamic<String> { get }
     var value: Dynamic<Double> { get }
+    var prefix: Dynamic<String> {get}
     var ruleType: RulesValue { get }
     func changeValue(to value: Double)
     func parse()
@@ -19,6 +20,7 @@ protocol RuleTableViewCellViewModelInterface {
 class RuleTableViewCellViewModel: RuleTableViewCellViewModelInterface {
     var nameRule: Dynamic<String> = Dynamic("")
     var value: Dynamic<Double> = Dynamic(0.0)
+    var prefix: Dynamic<String> = Dynamic("")
     var ruleType: RulesValue
     var rule: Rule
     
@@ -32,6 +34,11 @@ class RuleTableViewCellViewModel: RuleTableViewCellViewModelInterface {
     }
     
     func parse() {
+        if [RulesValue.circleWin, RulesValue.dryWin, RulesValue.winLost].contains(ruleType) {
+            self.prefix.value = RulesValue.winAll.contentDisplay
+        } else {
+            self.prefix.value = ""
+        }
         self.nameRule.value = ruleType.contentDisplay
         if let keyPath = ruleType.keyPath {
             self.value.value = Double(rule.value(forKeyPath: keyPath) as? Int16 ?? 0)
